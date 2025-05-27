@@ -4,35 +4,34 @@
 //   res.render('index', { title: 'Route Separation Example' });
 // };
 const express = require('express');
-const app = express();
-const port = 3001;
-const waste_types = require('./waste_types.json')
+const router = express.Router();
+const pool = require('./database');
+// const waste_types = require('./waste_types.json')
 
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true }));
 
-app.get('/waste_types', (req, res) => {
-  res.json(waste_types);
+router.get('/dashboard', async (req, res) => {
+    try {
+const volTable = 'SELECT type, quantity FROM waste_type;';
+const result = await pool.query(volTable); 
+ res.json(result.rows)
+ console.log(result.rows);
+    } catch (error) {
+        console.error('Erreur dans /dashboard:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    };
 });
+module.exports = router;
 
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-});
+// router.post('/waste_type', async (req, res) => {
+//   try {
+//     const { collecte_id, type, quantity } = req.body;
+//   }
+
+//   const values = [collecte_id, type, quantity];
+// const result = await pool.query(sql, values);
 
 
-
-
-// CREATE TABLE waste_type {
-// id BIGSERIAL,
-// date DATE NOT NULL, 
-// city TEXT NOT NULL, 
-// Cigarette_butts INTEGER DEFAULT 0,
-// plastic INTEGER DEFAULT 0,
-// glass INTEGER DEFAULT 0,
-// metal INTEGER DEFAULT 0,
-// electronic INTEGER DEFAULT 0,
-// others INTEGER DEFAULT 0,
-// created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-// updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
-// }
+// app.get('/waste_types', (req, res) => {
+//   res.json(waste_types);
+// });
