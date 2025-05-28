@@ -1,12 +1,9 @@
 const express = require('express')
 const app = express()
-const port =3008
+const port =3002
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-
-app.listen(port, () => {
-})
 
 const volonters =[
   
@@ -73,73 +70,139 @@ const volonters =[
      
 ]
     
-app.get('/', (req, res) => {
-    res.send(volonters)
-})
+ 
+
+// app.get('/volunteers/search', (req, res) => {
+//   const result =[]
+//   console.log(volonters)
+//     console.log(req.query.name)
+
+//     for (let i = 0 ; i< volonters.length; i++){
+ 
+
+//       if (volonters[i].name===req.query.name){
+//         result.push((myPets)[i])
+//       }
+
+//       else if (volonters[i].type===req.query.type){
+//         result.push((volonters)[i])
+       
+//       }
+       
+      
+//     }
+
+//     res.send(result)
+// })
+
+app.get('/volunteers/:city', (req, res) => {
+    for (let i = 0 ; i< 8; i++){
   
+  
+   const express = require('express')
+        const app = express()
+    const port =3002
+
+    app.use(express.json()) // for parsing application/json
+    app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+    app.get('/', (req, res) => {
+
+        res.send(volonters)
+    })
+    
+
+// app.listen(port, () => {
+//   // console.log(`Example app listening on port ${port}`)
+// })
+
+
+app.get('/volunteers/:location', (req, res) => {
+    console.log('coucou')
+    for (let i = 0 ; i< 8; i++){
+        if (volonters[i].location ===req.params.location){
+            res.send(volonters[i])
+        }
+    }
+})
+
+
+// res.send(result)
+
+
+// app.get('/animals/:city', (req, res) => {
+  
+//   // console.log('un: '+ myPets)
+//   // console.log('deux: '+req.params)
+  
+//   for (let i = 0 ; i< 4; i++){
+    
+//     if (myPets[i].city===req.params.city){
+      
+//       // console.log("reponse: "+(myPets)[i].city)
+//       res.send((myPets)[i])
+      
+//     }
+//   }
+// })
+
+
+app.get('/', (req, res) => {
+    // console.log(myPets)
+        res.send(myPets)
+    
+})
+
+app.listen(port, () => {
+  // console.log(`Example app listening on port ${port}`)
+})
+
 const task = [
-    { message: "coucou et merci"}
+    { message: "apprendre"}
 ]
+
+
+
+
 app.get('/task', (req, res) => {
     res.send(task)
 })
 
-app.get('/all', (req, res) => {
+
+}
+})
+
+
+
+
+
+  
+    
+
+
+app.get('/', (req, res) => {
+    // console.log(myPets)
+        res.send(volonters)
+    
+      })
+      
+      app.listen(port, () => {
+ 
+})
+
+const task = [
+    { message: "coucou"}
+]
+
+  
+  
+ app.get('/task', (req, res) => {
+     res.send(task)
+})
+    
+    
+
+
+app.get('/tout', (req, res) => {
     res.send(volonters)
 })
-
-
-
-
-
-
-
-app.get('/volunteers/search', (req, res) => {
-    const result =[]
-    for (let i = 0 ; i< volonters.length; i++){
-        
-        
-        if (volonters[i].location===req.query.location){
-            result.push((vol)[i])
-        }
-        
-        else if (volonters[i].password===req.query.password){
-            result.push((volonters)[i])
-        }
-    }
-    
-    res.send(result)
-})
-
-    
-
-        
-        
-
-
-
-
-
-
-// app.get('/volunteers/:location', (req, res) => {
-//     console.log('coucou')
-//     for (let i = 0 ; i< 8; i++){
-//         if (volonters[i].location ===req.params.location){
-//             res.send(volonters[i])
-//         }
-//     }
-// })
-
-  
-    
-
-
-    
-
-
-
-  
-  
-    
-    
-
