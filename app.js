@@ -1,28 +1,17 @@
-require('dotenv').config();
+const express = require('express');
+const app = express();
+const port = 3001;
 
-const { Pool } = require('pg');
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true }));
 
-const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
+// const routes = require('./routes')
+// app.use('/', routes) 
+const dashboardRoutes = require('./dashboard');
+app.use('/', dashboardRoutes)
 
-const pool = new Pool({
-  host: PGHOST,
-  database: PGDATABASE,
-  username: PGUSER,
-  password: PGPASSWORD,
-  port: 5432,
-  ssl: {
-    require: true,
-  },
+// const dashboardRoutes = require('./dashboard');
+// app.use('/api', dashboardRoutes);
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
 });
-
-async function getPgVersion() {
-  const client = await pool.connect();
-  try {
-    const result = await client.query('SELECT version()');
-    console.log(result.rows[0]);
-  } finally {
-    client.release();
-  }
-}
-
-getPgVersion();
