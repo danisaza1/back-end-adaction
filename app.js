@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 
 const app = express();
 const cors = require('cors');
@@ -42,6 +41,9 @@ app.use('/', collectesRoutes);
 // ✅ Démarrage du serveur
 app.listen(port, () => {
   console.log(`🚀 Backend démarré sur http://localhost:${port}`);
+<<<<<<< HEAD
 =======
 >>>>>>> b795e05 (add: request to fetch waste types based on user profile)
+=======
+>>>>>>> bec34ed ("add")
 });
