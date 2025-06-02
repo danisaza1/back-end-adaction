@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
+const cors = require('cors');
 const port = 3001;
+app.use(cors())
 
 app.use(express.json())
 // ✅ Middleware CORS - autorise toutes les origines (à restreindre en prod !)
@@ -21,6 +23,7 @@ const profilRoutes = require('./profil');
 app.use('/', profilRoutes);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
+<<<<<<< HEAD
   
 });
 
@@ -39,4 +42,6 @@ app.use('/', collectesRoutes);
 // ✅ Démarrage du serveur
 app.listen(port, () => {
   console.log(`🚀 Backend démarré sur http://localhost:${port}`);
+=======
+>>>>>>> b795e05 (add: request to fetch waste types based on user profile)
 });
