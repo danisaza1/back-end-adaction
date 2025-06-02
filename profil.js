@@ -1,137 +1,35 @@
-const express = require('express')
-const app = express()
-const port =3008
+const express = require('express');
+const router = express.Router();
+const pool = require('./database');
 
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.listen(port, () => {
-})
-
-const volonters =[
-  
-          {
-            "id": 1,
-            "firstname": "Monica",
-            "lastname": "Geller",
-            "email": "monica.geller@test.fr",
-            "password": "test1234",
-            "location": "Paris",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 2,
-            "firstname": "Rachel",
-            "lastname": "Green",
-            "email": "rachel.green@test.fr",
-            "password": "test1234",
-            "location": "Paris",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 3,
-            "firstname": "Phoebe",
-            "lastName": "Buffay",
-            "email": "phoebe.buffay@test.fr",
-            "password": "test1234",
-            "location": "Nantes",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 4,
-            "firstname": "Joey",
-            "lastname": "Tribbiani",
-            "email": "joey.tribbiani@test.fr",
-            "password": "test1234",
-            "location": "Nantes",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 5,
-            "firstname": "Chandler",
-            "lastname": "Bing",
-            "email": "chandler.bing@test.fr",
-            "password": "test1234",
-            "location": "Paris",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 6,
-            "firstname": "Ross",
-            "lastname": "Geller",
-            "email": "ross.geller@test.fr",
-            "password": "test1234",
-            "location": "Lyon",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-     
-]
-    
-app.get('/', (req, res) => {
-    res.send(volonters)
-})
-  
-const task = [
-    { message: "coucou et merci"}
-]
-app.get('/task', (req, res) => {
-    res.send(task)
-})
-
-app.get('/all', (req, res) => {
-    res.send(volonters)
-})
+router.get('/profil', async (req, res) => {
+    try {
+const volTable = 'SELECT * FROM volunteers;';
+const result = await pool.query(volTable); 
+res.json(result.rows)
+console.log(result.rows);
+    } catch (error) {
+        console.error('Erreur dans /profil:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    };
+});
 
 
 
+router.get('/name', async (req, res) => {
+    try {
+        const volTable = 'SELECT firstname,lastname FROM volunteers;';
+        const result = await pool.query(volTable); 
+        res.json(result.rows)
+        console.log(result.rows);
+    } catch (error) {
+        console.error('Erreur dans /name:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    };
+});
 
-
-
-
-app.get('/volunteers/search', (req, res) => {
-    const result =[]
-    for (let i = 0 ; i< volonters.length; i++){
-        
-        
-        if (volonters[i].location===req.query.location){
-            result.push((vol)[i])
-        }
-        
-        else if (volonters[i].password===req.query.password){
-            result.push((volonters)[i])
-        }
-    }
-    
-    res.send(result)
-})
-
-    
-
-        
-        
-
-
-
-
-
-
-// app.get('/volunteers/:location', (req, res) => {
-//     console.log('coucou')
-//     for (let i = 0 ; i< 8; i++){
-//         if (volonters[i].location ===req.params.location){
-//             res.send(volonters[i])
-//         }
-//     }
-// })
-
-  
-    
+module.exports = router;
 
 
     
