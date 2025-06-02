@@ -22,7 +22,6 @@ const profilRoutes = require('./profil');
 app.use('/', profilRoutes);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-<<<<<<< HEAD
   
 });
 
@@ -40,10 +39,5 @@ app.use('/', collectesRoutes);
 
 // ✅ Démarrage du serveur
 app.listen(port, () => {
-  console.log(`🚀 Backend démarré sur http://localhost:${port}`);
-<<<<<<< HEAD
-=======
->>>>>>> b795e05 (add: request to fetch waste types based on user profile)
-=======
->>>>>>> bec34ed ("add")
+  console.log(`Example app listening on port ${port}`)
 });
