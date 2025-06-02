@@ -25,6 +25,9 @@ app.use("/", dashboardRoutes);
 const collectesRoutes = require("./routes/collectes");
 app.use("/", collectesRoutes);
 
+const donationsRoutes = require('./routes/donations');
+app.use('/', donationsRoutes);
+
 // ✅ Démarrage du serveur
 app.listen(port, () => {
   console.log(`🚀 Backend démarré sur http://localhost:${port}`);
