@@ -57,7 +57,7 @@ router.post('/collectes', async (req, res) => {
     res.status(200).json({ message: 'Collecte enregistrée avec succès.' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Erreur lors de l\'enregistrement.' });
+    res.status(500).json({ error: `Erreur lors de l'enregistrement.` });
   }
 });
 
