@@ -29,6 +29,33 @@ router.get('/name', async (req, res) => {
     };
 });
 
+
+router.post('/collectes', async (req, res) => {
+    console.log("📩 Données reçues :", req.body); //
+try {
+  const { firstname, lastname } = req.body;
+  
+   // 1. Récupérer l'id de la ville à partir de son nom
+
+ 
+ 
+
+  const city_id = cityResult.rows[0].id;
+
+  // Exemple : insérer dans la base de données
+  for (const item of wasteTypes) {
+    await pool.query(
+      'INSERT INTO volunteer (firstname, lastname, ) VALUES ($1, $2)',
+      [firstname, lastname]
+    );
+  }
+
+  res.status(200).json({ message: 'Collecte enregistrée avec succès.' });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ error: `Erreur lors de l'enregistrement.` });
+}
+});
 module.exports = router;
 
 
