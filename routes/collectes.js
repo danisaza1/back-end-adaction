@@ -27,8 +27,6 @@ router.get('/cities', async (req, res) => {
 });
 
 
-
-
 router.post('/collectes', async (req, res) => {
       console.log("📩 Données reçues :", req.body); //
   try {
