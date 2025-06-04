@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('./database');
+const pool = require('../database');
 
 
 router.get('/profil', async (req, res) => {
     try {
-const volTable = "SELECT * FROM volunteers";
+const volTable = "SELECT firstname, lastname, location FROM volunteers WHERE id=2";
 const result = await pool.query(volTable); 
 res.json(result.rows)
 console.log(result.rows);
@@ -47,6 +47,5 @@ module.exports = router;
 //     res.status(500).json({ error: `Erreur lors de l'enregistrement.` });
 //   }
 // });
-
 
 // module.exports = router;

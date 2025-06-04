@@ -1,7 +1,7 @@
 const express = require('express');
-const cors = require('cors');
 
 const app = express();
+const cors = require('cors');
 const port = 3001;
 app.use(cors())
 
@@ -22,6 +22,9 @@ app.use('/', dashboardRoutes);
 
 const collectesRoutes = require('./routes/collectes');
 app.use('/', collectesRoutes);
+
+const profilRoutes = require('./routes/profil');
+app.use('/', profilRoutes);
 
 // ✅ Démarrage du serveur
 app.listen(port, () => {

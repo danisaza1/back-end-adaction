@@ -4,7 +4,7 @@
 // };
 const express = require("express");
 const router = express.Router();
-const pool = require("./database");
+const pool = require('../database');
 // const waste_types = require('./waste_types.json')
 
 router.get("/dashboard", async (req, res) => {
@@ -16,6 +16,7 @@ router.get("/dashboard", async (req, res) => {
     const result = await pool.query(joinTable, [userId]);
     res.json(result.rows);
     console.log(result.rows);
+    
   } catch (error) {
     console.error("Erreur dans /dashboard:", error);
     res.status(500).json({ error: "Erreur serveur" });
