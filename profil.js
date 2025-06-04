@@ -5,7 +5,7 @@ const pool = require('./database');
 
 router.get('/profil', async (req, res) => {
     try {
-const volTable = 'SELECT * FROM volunteers;';
+const volTable = "SELECT * FROM volunteers";
 const result = await pool.query(volTable); 
 res.json(result.rows)
 console.log(result.rows);
@@ -16,14 +16,14 @@ console.log(result.rows);
 });
 module.exports = router;
 
-// router.post('/updateProfil', async (req, res) => {
+// router.get('/updateProfil', async (req, res) => {
 //       console.log("📩 Données reçues :", req.body); //
 //   try {
 //     const { firstname, lastname, location } = req.body;
     
 //      // 1. Récupérer l'id de la ville à partir de son nom
 //     const vol = await pool.query(
-//       'SELECT id FROM volunteers WHERE firstname = $1',
+//       'SELECT id FROM volunteers WHERE firstname = Mohamed',
 //       [firstname]    
 //     );
 
