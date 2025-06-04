@@ -1,208 +1,60 @@
-const express = require('express')
-const app = express()
-const port =3002
+const express = require('express');
+const router = express.Router();
+const pool = require('./database');
 
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-const volonters =[
+router.get('/profil', async (req, res) => {
+    try {
+const volTable = 'SELECT * FROM volunteers;';
+const result = await pool.query(volTable); 
+res.json(result.rows)
+console.log(result.rows);
+    } catch (error) {
+        console.error('Erreur dans /profil:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    };
+});
+
+
+
+router.get('/name', async (req, res) => {
+    try {
+        const volTable = 'SELECT firstname,lastname FROM volunteers;';
+        const result = await pool.query(volTable); 
+        res.json(result.rows)
+        console.log(result.rows);
+    } catch (error) {
+        console.error('Erreur dans /name:', error);
+        res.status(500).json({ error: 'Erreur serveur' });
+    };
+});
+
+
+router.post('/formulaire', async (req, res) => {
+   
+try {
+  console.log("📩 Données reçues :", req.body); 
+  //const { firstname, lastname } = req.body;
   
-          {
-            "id": 1,
-            "firstname": "Monica",
-            "lastname": "Geller",
-            "email": "monica.geller@test.fr",
-            "password": "test1234",
-            "location": "Paris",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 2,
-            "firstname": "Rachel",
-            "lastname": "Green",
-            "email": "rachel.green@test.fr",
-            "password": "test1234",
-            "location": "Paris",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 3,
-            "firstname": "Phoebe",
-            "lastName": "Buffay",
-            "email": "phoebe.buffay@test.fr",
-            "password": "test1234",
-            "location": "Nantes",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 4,
-            "firstname": "Joey",
-            "lastname": "Tribbiani",
-            "email": "joey.tribbiani@test.fr",
-            "password": "test1234",
-            "location": "Nantes",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 5,
-            "firstname": "Chandler",
-            "lastname": "Bing",
-            "email": "chandler.bing@test.fr",
-            "password": "test1234",
-            "location": "Paris",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-          {
-            "id": 6,
-            "firstname": "Ross",
-            "lastname": "Geller",
-            "email": "ross.geller@test.fr",
-            "password": "test1234",
-            "location": "Lyon",
-            "created_at": "2025-05-25",
-            "updated_at": "2025-05-25"
-          },
-     
-]
-    
+   // 1. Récupérer l'id de la ville à partir de son nom
+
+ 
  
 
-// app.get('/volunteers/search', (req, res) => {
-//   const result =[]
-//   console.log(volonters)
-//     console.log(req.query.name)
+  //const city_id = cityResult.rows[0].id;
 
-//     for (let i = 0 ; i< volonters.length; i++){
- 
+  // Exemple : insérer dans la base de données
+  //for (const item of wasteTypes) {
+    //await pool.query(
+      //'INSERT INTO volunteer (firstname, lastname, ) VALUES ($1, $2)',
+      //[firstname, lastname]
+    //);
+  //}
 
-//       if (volonters[i].name===req.query.name){
-//         result.push((myPets)[i])
-//       }
-
-//       else if (volonters[i].type===req.query.type){
-//         result.push((volonters)[i])
-       
-//       }
-       
-      
-//     }
-
-//     res.send(result)
-// })
-
-app.get('/volunteers/:city', (req, res) => {
-    for (let i = 0 ; i< 8; i++){
-  
-  
-   const express = require('express')
-        const app = express()
-    const port =3002
-
-    app.use(express.json()) // for parsing application/json
-    app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-
-    app.get('/', (req, res) => {
-
-        res.send(volonters)
-    })
-    
-
-// app.listen(port, () => {
-//   // console.log(`Example app listening on port ${port}`)
-// })
-
-
-app.get('/volunteers/:location', (req, res) => {
-    console.log('coucou')
-    for (let i = 0 ; i< 8; i++){
-        if (volonters[i].location ===req.params.location){
-            res.send(volonters[i])
-        }
-    }
-})
-
-
-// res.send(result)
-
-
-// app.get('/animals/:city', (req, res) => {
-  
-//   // console.log('un: '+ myPets)
-//   // console.log('deux: '+req.params)
-  
-//   for (let i = 0 ; i< 4; i++){
-    
-//     if (myPets[i].city===req.params.city){
-      
-//       // console.log("reponse: "+(myPets)[i].city)
-//       res.send((myPets)[i])
-      
-//     }
-//   }
-// })
-
-
-app.get('/', (req, res) => {
-    // console.log(myPets)
-        res.send(myPets)
-    
-})
-
-app.listen(port, () => {
-  // console.log(`Example app listening on port ${port}`)
-})
-
-const task = [
-    { message: "apprendre"}
-]
-
-
-
-
-app.get('/task', (req, res) => {
-    res.send(task)
-})
-
-
+  r//es.status(200).json({ message: 'Collecte enregistrée avec succès.' });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ error: `Erreur lors de l'enregistrement.` });
 }
-})
-
-
-
-
-
-  
-    
-
-
-app.get('/', (req, res) => {
-    // console.log(myPets)
-        res.send(volonters)
-    
-      })
-      
-      app.listen(port, () => {
- 
-})
-
-const task = [
-    { message: "coucou"}
-]
-
-  
-  
- app.get('/task', (req, res) => {
-     res.send(task)
-})
-    
-    
-
-
-app.get('/tout', (req, res) => {
-    res.send(volonters)
-})
+});
+module.exports = router;
