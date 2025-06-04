@@ -29,14 +29,9 @@ router.get("/cities", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-router.post("/collectes", async (req, res) => {
-  console.log("📩 Données reçues :", req.body); //
-=======
 
 router.post('/collectes', async (req, res) => {
       console.log("📩 Données reçues :", req.body); //
->>>>>>> dashboard
   try {
     const { date, cityName, wasteTypes } = req.body;
      console.log("📩 Données reçues :", req.body); //

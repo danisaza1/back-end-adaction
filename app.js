@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-const cors = require("cors");
-const express = require("express");
-
-=======
 const express = require('express');
 const cors = require('cors');
->>>>>>> dashboard
 const app = express();
 const port = 3001;
 app.use(cors());
