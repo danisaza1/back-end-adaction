@@ -4,12 +4,12 @@
 // };
 const express = require("express");
 const router = express.Router();
-const pool = require('../database');
+const pool = require("../database");
 // const waste_types = require('./waste_types.json')
 
 router.get("/dashboard", async (req, res) => {
-   //  de recuperat din profil dupa aia 
-  const userId = 2;
+  //  de recuperat din profil dupa aia
+  const userId = 4;
   try {
     const joinTable =
       "SELECT volunteers.id, volunteers.firstname, collects.date, waste_type.id, waste_type.type, waste_type.quantity FROM volunteers LEFT JOIN collects ON volunteers.id = collects.volunteer_id LEFT JOIN waste_type ON collects.id = waste_type.collecte_id WHERE volunteers.id = $1 ;";

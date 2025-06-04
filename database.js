@@ -1,6 +1,6 @@
-require('dotenv').config();
+require("dotenv").config();
 
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD } = process.env;
 
@@ -11,20 +11,17 @@ const pool = new Pool({
   password: PGPASSWORD,
   port: 5432,
   ssl: {
-     rejectUnauthorized: true, 
+    rejectUnauthorized: true,
   },
 });
 
 module.exports = pool;
 
-
-
-
-    // require: true,
+// require: true,
 // const pool = new Pool({
 
 //     connectionString: process.env.DATABASE_URL, ssl : {
-//         rejectUnauthorized: true,  
+//         rejectUnauthorized: true,
 //     }
 // });
 
@@ -40,4 +37,3 @@ module.exports = pool;
 // }
 
 // getPgVersion();
-
