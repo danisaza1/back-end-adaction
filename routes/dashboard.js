@@ -4,11 +4,7 @@
 // };
 const express = require("express");
 const router = express.Router();
-<<<<<<< HEAD:routes/dashboard.js
 const pool = require('../database');
-=======
-const pool = require("./database");
->>>>>>> b795e05 (add: request to fetch waste types based on user profile):dashboard.js
 // const waste_types = require('./waste_types.json')
 
 router.get("/dashboard", async (req, res) => {
