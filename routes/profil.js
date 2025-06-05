@@ -2,11 +2,12 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../database");
 
-router.get("/profil", async (req, res) => {
+router.get("/profil/:id", async (req, res) => {
+    const { id } = req.params;
   try {
-    const volTable =
-      "SELECT firstname, lastname, location FROM volunteers WHERE id=2";
-    const result = await pool.query(volTable);
+    const query =
+      "SELECT firstname, lastname, location FROM volunteers WHERE id=$1";
+    const result = await pool.query(query, id);
     res.json(result.rows);
     console.log(result.rows);
   } catch (error) {
@@ -16,23 +17,71 @@ router.get("/profil", async (req, res) => {
 });
 module.exports = router;
 
-router.post("/updateProfil", async (req, res) => {
-  console.log("📩 Données reçues :", req.body);
+// router.patch("/updateProfil/:id", async (req, res) => {
+//   console.log("📩 Données reçues :", req.body);
+//   try {
+//     const profilId = req.params.id
+//     const { firstname, lastname, location } = req.body;
+
+//     const vol = await pool.query(
+//       `UPDATE volunteers 
+//        SET firstname = $1, lastname = $2, location = $3 
+//        WHERE id = $4`,
+//       [firstname, lastname, location, "Mohamed"]
+//     );
+
+//     res.status(200).json({ message: "Collecte enregistrée avec succès." });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: `Erreur lors de l'enregistrement.` });
+//   }
+// });
+
+// module.exports = router;
+router.patch("/updateProfil/:id", async (req, res) => {
+  const { id } = req.params;
+  const fields = req.body;
+
+  console.log("📩 Données reçues :", fields);
+
+  // Si aucune donnée à mettre à jour
+  if (Object.keys(fields).length === 0) {
+    return res.status(400).json({ error: "Aucun champ à mettre à jour." });
+  }
+
   try {
-    const { firstname, lastname, location } = req.body;
+    // Construction dynamique des champs
+    const setClauses = [];
+    const values = [];
+    let index = 1;
 
-    const vol = await pool.query(
-      `UPDATE volunteers 
-  SET firstname = $1, lastname = $2, location = $3 
-  WHERE firstname = $4`,
-      [firstname, lastname, location, "Mohamed"]
-    );
+    for (const [key, value] of Object.entries(fields)) {
+      setClauses.push(`${key} = $${index}`);
+      values.push(value);
+      index++;
+    }
 
-    res.status(200).json({ message: "Collecte enregistrée avec succès." });
+    values.push(id); // L'id est la dernière valeur
+
+    const query = `
+      UPDATE volunteers
+      SET ${setClauses.join(', ')}
+      WHERE id = $${index}
+      RETURNING *;
+    `;
+
+    const result = await pool.query(query, values);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Profil non trouvé." });
+    }
+
+    res.status(200).json({
+      message: "Profil mis à jour avec succès.",
+      profil: result.rows[0],
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: `Erreur lors de l'enregistrement.` });
+    console.error("❌ Erreur SQL :", error);
+    res.status(500).json({ error: "Erreur lors de la mise à jour." });
   }
 });
-
-module.exports = router;
