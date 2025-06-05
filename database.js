@@ -15,29 +15,4 @@ const pool = new Pool({
   },
 });
 
-<<<<<<< HEAD
 module.exports = pool;
-
-// require: true,
-// const pool = new Pool({
-
-//     connectionString: process.env.DATABASE_URL, ssl : {
-//         rejectUnauthorized: true,
-//     }
-// });
-
-//la suite est pour tester la connexion
-// async function getPgVersion() {
-//   const client = await pool.connect();
-//   try {
-//     const result = await client.query('SELECT version()');
-//     console.log(result.rows[0]);
-//   } finally {
-//     client.release();
-//   }
-// }
-
-// getPgVersion();
-=======
-module.exports = pool;
->>>>>>> gestion-des-benevoles
