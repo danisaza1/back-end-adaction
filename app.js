@@ -5,6 +5,8 @@ const port = 3001;
 app.use(cors());
 
 // ✅ Middleware CORS - autorise toutes les origines (à restreindre en prod !)
+//Un middleware  est une fonction intermédiaire qui s’exécute entre le moment où le serveur reçoit une requête 
+// (request) et celui où il envoie une réponse (response). 
 app.use(
   cors({
     origin: "*",
