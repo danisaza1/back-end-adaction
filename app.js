@@ -17,7 +17,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const profilRoutes = require('./profil');
+const profilRoutes = require('./routes/formulaire');
 // ici /profil appelle le fichier profil.js
 app.use('/', profilRoutes);
 
@@ -29,6 +29,9 @@ app.use('/', dashboardRoutes);
 
 const collectesRoutes = require('./routes/collectes');
 app.use('/', collectesRoutes);
+
+const formulaireRoutes = require('./routes/formulaire')
+app.use('/', formulaireRoutes);
 
 // ✅ Démarrage du serveur
 app.listen(port, () => {

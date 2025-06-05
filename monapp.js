@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const profilRoutes = require('./profil');
+const profilRoutes = require('./routes/formulaire');
 // ici /profil appelle le fichier profil.js
 app.use('/', profilRoutes);
 app.listen(port, () => {
