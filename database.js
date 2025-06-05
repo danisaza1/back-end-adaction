@@ -15,6 +15,7 @@ const pool = new Pool({
   },
 });
 
+<<<<<<< HEAD
 module.exports = pool;
 
 // require: true,
@@ -37,3 +38,6 @@ module.exports = pool;
 // }
 
 // getPgVersion();
+=======
+module.exports = pool;
+>>>>>>> gestion-des-benevoles

@@ -21,18 +21,21 @@ app.use((req, res, next) => {
   console.log('Raw body:', req.body);
   next();
 });
-// ✅ Routes
-const dashboardRoutes = require("./routes/dashboard");
-app.use("/", dashboardRoutes);
-
-const collectesRoutes = require("./routes/collectes");
-app.use("/", collectesRoutes);
-
-const donationsRoutes = require('./routes/donations');
-app.use('/', donationsRoutes);
 
 const profilRoutes = require('./routes/profil');
 app.use('/', profilRoutes);
+
+const cityRoutes = require('./cities');
+app.use('/', cityRoutes);
+// ✅ Routes
+const dashboardRoutes = require('./routes/dashboard');
+app.use('/', dashboardRoutes);
+
+const collectesRoutes = require('./routes/collectes');
+app.use('/', collectesRoutes);
+
+const formulaireRoutes = require('./routes/formulaire')
+app.use('/', formulaireRoutes);
 
 // ✅ Démarrage du serveur
 app.listen(port, () => {

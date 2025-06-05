@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+<<<<<<< HEAD
     "@neondatabase/serverless": "^1.0.0",
+=======
+>>>>>>> gestion-des-benevoles
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
