@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 const profilRoutes = require('./routes/profil');
 app.use('/', profilRoutes);
 
-const cityRoutes = require('./cities');
+const cityRoutes = require('./routes/cities');
 app.use('/', cityRoutes);
 // ✅ Routes
 const dashboardRoutes = require('./routes/dashboard');
@@ -38,6 +38,10 @@ app.use('/', collectesRoutes);
 
 const formulaireRoutes = require('./routes/formulaire')
 app.use('/', formulaireRoutes);
+
+const donationsRoutes = require('./routes/donations');
+app.use('/', donationsRoutes);
+  
 
 // ✅ Démarrage du serveur
 app.listen(port, () => {
