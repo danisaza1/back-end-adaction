@@ -20,13 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 const profilRoutes = require('./profil');
 // ici /profil appelle le fichier profil.js
 app.use('/', profilRoutes);
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-  
-});
-
-console.log('app.js')
-
 
 const cityRoutes = require('./cities');
 app.use('/', cityRoutes);
