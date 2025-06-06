@@ -17,7 +17,7 @@ console.log(result.rows);
 
 router.get('/name', async (req, res) => {
     try {
-        const volTable = 'SELECT firstname,lastname FROM volunteers;';
+        const volTable = 'SELECT firstname,lastname,location FROM volunteers;';
         const result = await pool.query(volTable); 
         res.json(result.rows)
         console.log(result.rows);
