@@ -2,16 +2,21 @@ const express = require("express");
 const router = express.Router();
 const pool = require("../database");
 
-router.get("/profil/:id", async (req, res) => {
-    const { id } = req.params;
+router.get("/profil/:id/", async (req, res) => {
+  const { id } = req.params;
   try {
     const query =
-      "SELECT firstname, lastname, location FROM volunteers WHERE id=$1";
-    const result = await pool.query(query, id);
-    res.json(result.rows);
-    console.log(result.rows);
+      "SELECT id, firstname, lastname, location FROM volunteers WHERE id=$1";
+    const result = await pool.query(query, [id]);
+    
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Profil non trouvé." });
+    }
+
+    res.status(200).json(result.rows[0]); // ← retourne un objet simple
+    console.log("📤 Données renvoyées :", result.rows[0]);
   } catch (error) {
-    console.error("Erreur dans /profil:", error);
+    console.error("❌ Erreur dans /profil:", error);
     res.status(500).json({ error: "Erreur serveur" });
   }
 });
@@ -24,8 +29,8 @@ module.exports = router;
 //     const { firstname, lastname, location } = req.body;
 
 //     const vol = await pool.query(
-//       `UPDATE volunteers 
-//        SET firstname = $1, lastname = $2, location = $3 
+//       `UPDATE volunteers
+//        SET firstname = $1, lastname = $2, location = $3
 //        WHERE id = $4`,
 //       [firstname, lastname, location, "Mohamed"]
 //     );
@@ -38,6 +43,7 @@ module.exports = router;
 // });
 
 // module.exports = router;
+
 router.patch("/updateProfil/:id", async (req, res) => {
   const { id } = req.params;
   const fields = req.body;
@@ -65,7 +71,7 @@ router.patch("/updateProfil/:id", async (req, res) => {
 
     const query = `
       UPDATE volunteers
-      SET ${setClauses.join(', ')}
+      SET ${setClauses.join(", ")}
       WHERE id = $${index}
       RETURNING *;
     `;

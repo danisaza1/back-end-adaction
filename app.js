@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 3001;
-app.use(cors());
+// app.use(cors());
 
 // ✅ Middleware CORS - autorise toutes les origines (à restreindre en prod !)
 app.use(
@@ -32,7 +32,7 @@ const donationsRoutes = require('./routes/donations');
 app.use('/', donationsRoutes);
 
 const profilRoutes = require('./routes/profil');
-app.use('/', profilRoutes);
+app.use('/api', profilRoutes);
 
 // ✅ Démarrage du serveur
 app.listen(port, () => {
