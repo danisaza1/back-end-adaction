@@ -19,22 +19,7 @@ router.post("/donations", async (req, res) => {
   }
 })
 
-// router.get("/donations/:id", async (req, res) => {
-// const volunteerId = req.params.id; 
-//   const result = await pool.query(
-//     "SELECT SUM(points) AS total_points FROM donations WHERE volunteer_id = $1",
-//     [volunteerId]
-//   )
-//   res.json({ totalPoints: result.rows[0].total_points || 0 });
-// });
+
 module.exports = router;
 
 
-
-
-// app.post('/tasks/', (req, res) => {
-//    console.log(req.body)
-//   // database.push({tasks: req.body.task, completition: 'fait'})
-//   res.send()
-  
-// })

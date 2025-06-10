@@ -1,28 +1,24 @@
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session');
 const app = express();
 const port = 3001;
 app.use(cors());
-
-// ✅ Middleware CORS - autorise toutes les origines (à restreindre en prod !)
-//Un middleware  est une fonction intermédiaire qui s’exécute entre le moment où le serveur reçoit une requête 
-// (request) et celui où il envoie une réponse (response). 
-app.use(
-  cors({
-    origin: "*",
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-  })
-);
 
 // ✅ Middleware pour parser le JSON et les formulaires
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
-  console.log('Content-Type:', req.headers['content-type']);
-  console.log('Raw body:', req.body);
+ console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
   next();
 });
+app.use(session({
+  secret: 'ton_secret_de_session',  // une clé secrète pour sécuriser la session
+  resave: false,                    // évite de sauvegarder la session si rien n’a changé
+  saveUninitialized: true,          // sauvegarde même les sessions non modifiées
+  cookie: { secure: false }          // à mettre à true uniquement si HTTPS
+}));
 
 const profilRoutes = require('./routes/profil');
 app.use('/', profilRoutes);
@@ -42,6 +38,8 @@ app.use('/', formulaireRoutes);
 const donationsRoutes = require('./routes/donations');
 app.use('/', donationsRoutes);
   
+const authRoutes = require('./routes/auth');
+app.use('/', authRoutes);
 
 // ✅ Démarrage du serveur
 app.listen(port, () => {
