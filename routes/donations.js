@@ -21,7 +21,17 @@ router.post("/donations", async (req, res) => {
   }
 })
 
+router.get('/donations/points/:volunteerId', async (req, res) => {
+  const { volunteerId } = req.params;
+  try {
+    const query = `SELECT SUM(points) AS total_points FROM donations WHERE volunteer_id = $1`;
+    const result = await pool.query(query, [volunteerId]);
+    const totalPoints = result.rows[0].total_points || 0; // 0 si pas de dons
+    res.json({ totalPoints });
+  } catch (error) {
+    console.error("Erreur dans /donations/points:", error);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
 
 module.exports = router;
-
-

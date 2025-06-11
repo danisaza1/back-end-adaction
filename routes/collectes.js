@@ -1,3 +1,5 @@
+
+
 const express = require("express");
 const router = express.Router();
 const pool = require("../database");
@@ -30,9 +32,8 @@ router.get('/cities', async (req, res) => {
 
 
 router.post('/collectes', async (req, res) => {
-      console.log("📩 Données reçues :", req.body); //
   try {
-    const { date, cityName, wasteTypes } = req.body;
+    const { date, cityName, wasteTypes, volunteerId  } = req.body;
      console.log("📩 Données reçues :", req.body); //
 
     // 1. Récupérer l'id de la ville à partir de son nom
@@ -50,15 +51,32 @@ router.post('/collectes', async (req, res) => {
 
     const city_id = cityResult.rows[0].id;
 
-    // Exemple : insérer dans la base de données
-    for (const item of wasteTypes) {
-      await pool.query(
-        "INSERT INTO collects (date, city_id, type, quantity) VALUES ($1, $2, $3, $4)",
 
-        [date, city_id, item.label, item.quantity]
-      );
-    }
 
+    const insertCollectQuery = `
+            INSERT INTO collects (date, city, volunteer_id, city_id)
+            VALUES ($1, $2, $3, $4)
+            RETURNING id; -- Get the ID of the newly inserted collection
+        `;
+        const collectResult = await pool.query(insertCollectQuery, [
+            date,
+            cityName,  //mais ici on garde le nom et pas l'id
+            volunteerId, 
+            city_id    //pour faire lien avec cities  
+        ]);
+const collecte_id = collectResult.rows[0].id; // This is the ID we'll use for waste_type
+ for (const item of wasteTypes) {
+            // Ensure item.label matches waste_enum types if applicable, or is just TEXT
+            const insertWasteTypeQuery = `
+                INSERT INTO waste_type (collecte_id, type, quantity)
+                VALUES ($1, $2, $3);
+            `;
+            await pool.query(insertWasteTypeQuery, [
+                collecte_id, // Link to the 'collects' record
+                item.label,  // This is the 'type' in your waste_type table
+                item.quantity
+            ]);
+          }
     res.status(200).json({ message: "Collecte enregistrée avec succès." });
   } catch (error) {
     console.error(error);
