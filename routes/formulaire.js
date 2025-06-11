@@ -5,7 +5,7 @@ const pool = require('../database');
 
 router.get('/profil', async (req, res) => {
     try {
-const volTable = 'SELECT * FROM volunteers;';
+const volTable = 'SELECT * FROM volunteers ORDER BY id DESC LIMIT 10;';
 const result = await pool.query(volTable); 
 res.json(result.rows)
 console.log(result.rows);
