@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
-const express = require("express");
-const cors = require("cors");
-const session = require("express-session");
+import express from "express";
+import cors from "cors";
+import session from "express-session";
 const app = express();
 const port = 3001;
 const prisma = new PrismaClient();
@@ -22,28 +22,28 @@ app.use(
     resave: false, // évite de sauvegarder la session si rien n’a changé
     saveUninitialized: true, // sauvegarde même les sessions non modifiées
     cookie: { secure: false }, // à mettre à true uniquement si HTTPS
-  })
+  }),
 );
 
-const profilRoutes = require("./routes/profil");
+import profilRoutes from "./routes/profil.js";
 app.use("/", profilRoutes);
 
-const cityRoutes = require("./routes/cities");
+import cityRoutes from "./routes/cities.js";
 app.use("/", cityRoutes);
 
-const dashboardRoutes = require("./routes/dashboard");
+import dashboardRoutes from "./routes/dashboard.js";
 app.use("/", dashboardRoutes);
 
-const collectesRoutes = require("./routes/collectes");
+import collectesRoutes from "./routes/collectes.js";
 app.use("/", collectesRoutes);
 
-const formulaireRoutes = require("./routes/formulaire");
+import formulaireRoutes from "./routes/formulaire.js";
 app.use("/", formulaireRoutes);
 
-const donationsRoutes = require("./routes/donations");
+import donationsRoutes from "./routes/donations.js";
 app.use("/", donationsRoutes);
 
-const authRoutes = require("./routes/auth");
+import authRoutes from "./routes/auth.js";
 app.use("/", authRoutes);
 
 // ✅ Démarrage du serveur
