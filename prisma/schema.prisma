@@ -1,0 +1,105 @@
+//Le dice a Prisma que genere automáticamente un 
+//cliente JavaScript para que puedas hacer consultas 
+//en tu código. Es como construir un control de 
+//videojuego personalizado para manejar tus personajes.
+
+
+// generator =	Crea un cliente para que tú puedas usar 
+//los modelos en tu código
+// datasource = Le dice a Prisma dónde están 
+//las tablas (base de datos)
+// model= Define cómo se ven esas tablas y qué datos guardan
+
+
+// En Prisma, las relaciones son bidireccionales, 
+// lo que significa que si WasteType está relacionado 
+// con Collect, Prisma quiere que tú declares también 
+// la relación desde Collect hacia WasteType, aunque sea opcional.
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") //esto esta en .env y que me lleva a Neon
+}
+
+model City {
+  id         BigInt    @id @default(autoincrement())
+  city_name  String
+  lat        Float?    // Decimal(9,6) lo representamos como Float opcional
+  lng        Float?    // Igual que lat
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  collect     Collect[] 
+
+  @@map("cities")  // Mapea a la tabla real "cities" 
+//   esto es si el nombre es distinto ya que Prisma solo 
+//   "lee" model con pascal, osea primera letra majuscula
+}
+
+model Collect {
+  id           BigInt    @id @default(autoincrement())
+  date         DateTime
+  city         String
+  volunteerId  BigInt?   // clave foránea opcional
+  volunteer    Volunteer? @relation(fields: [volunteerId], references: [id], onDelete: SetNull)
+  cityId       BigInt?   // clave foránea opcional
+  cityRel      City?     @relation(fields: [cityId], references: [id], onDelete: SetNull)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  wastes     WasteType[]  // 👈 Esta es la relación inversa, quiere decir que collect puede tener muchos wastetypes relacionados
+
+  @@map("collects")
+}
+
+model Volunteer {
+  id           BigInt    @id @default(autoincrement())
+  firstname    String
+  lastname     String
+  email        String    @unique 
+  password     String
+  location     String
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  collect     Collect[]  
+
+  @@map("volunteers")
+}
+//?  = campo que puede ser null
+
+
+model WasteType {
+  id          BigInt     @id @default(autoincrement())
+  collecteId  BigInt?    // clave foránea a collects
+  collecte    Collect?   @relation(fields: [collecteId], references: [id], onDelete: SetNull)
+  type        WasteEnum
+  quantity    Int        @default(0)
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  @@map("waste_types")
+}
+
+
+
+enum WasteEnum {
+  cigarette_butts
+  plastic
+  glass
+  metal
+  electronic
+  others
+}
+
+
+
+
+
+
+

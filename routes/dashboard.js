@@ -9,28 +9,36 @@ const pool = require("../database");
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/dashboard", authMiddleware, async (req, res) => {
-    console.log("1. Entrando a la ruta /dashboard.");
-    try {
-        console.log("2. Dentro del bloque try.");
-        const userId = req.user.id;
-        console.log("3. ID de usuario extraído del token (req.user.id):", userId); // <-- CLAVE: ¿Es 22?
+  console.log("1. Entrando a la ruta /dashboard.");
+  try {
+    console.log("2. Dentro del bloque try.");
+    const userId = req.user.id;
+    console.log("3. ID de usuario extraído del token (req.user.id):", userId); // <-- CLAVE: ¿Es 22?
 
-        if (!userId) {
-            console.log("4. No se encontró userId, enviando 401.");
-            return res.status(401).json({ error: "ID de usuario faltante. Asegúrate de estar autenticado." });
-        }
+    if (!userId) {
+      console.log("4. No se encontró userId, enviando 401.");
+      return res
+        .status(401)
+        .json({
+          error: "ID de usuario faltante. Asegúrate de estar autenticado.",
+        });
+    }
 
-        // Estas son las fechas que el backend usará para la consulta
-        const month = parseInt(req.query.month); 
-        const year = parseInt(req.query.year);   
+    // Estas son las fechas que el backend usará para la consulta
+    const month = parseInt(req.query.month);
+    const year = parseInt(req.query.year);
 
-        // Validar que sean números válidos, si no, usar la fecha actual como fallback
-        const currentMonth = !isNaN(month) && month >= 1 && month <= 12 ? month : new Date().getMonth() + 1;
-        const currentYear = !isNaN(year) && year >= 1900 ? year : new Date().getFullYear(); // Ajusta el año mínimo si es necesario
+    // Validar que sean números válidos, si no, usar la fecha actual como fallback
+    const currentMonth =
+      !isNaN(month) && month >= 1 && month <= 12
+        ? month
+        : new Date().getMonth() + 1;
+    const currentYear =
+      !isNaN(year) && year >= 1900 ? year : new Date().getFullYear(); // Ajusta el año mínimo si es necesario
 
-        console.log(`5. Filtrando por Mes: ${currentMonth}, Año: ${currentYear}`); // <-- CLAVE: ¿Es 5 y 2025?
+    console.log(`5. Filtrando por Mes: ${currentMonth}, Año: ${currentYear}`); // <-- CLAVE: ¿Es 5 y 2025?
 
-        const wastesQuery = `
+    const wastesQuery = `
             SELECT
                 wt.type,
                 SUM(wt.quantity) AS total_quantity
@@ -47,36 +55,51 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
             ORDER BY
                 wt.type;
         `;
-        // CLAVE: ¿Cuáles son los parámetros exactos que se están pasando a la base de datos?
-        console.log("6. Ejecutando wastesQuery con parámetros:", [userId, currentMonth, currentYear]); 
-        const wastesResult = await pool.query(wastesQuery, [userId, currentMonth, currentYear]);
-        // CLAVE: ¿Qué devuelve la base de datos realmente al backend?
-        console.log("7. wastesQuery ejecutada. Resultados (wastesResult.rows):", wastesResult.rows);
+    // CLAVE: ¿Cuáles son los parámetros exactos que se están pasando a la base de datos?
+    console.log("6. Ejecutando wastesQuery con parámetros:", [
+      userId,
+      currentMonth,
+      currentYear,
+    ]);
+    const wastesResult = await pool.query(wastesQuery, [
+      userId,
+      currentMonth,
+      currentYear,
+    ]);
+    // CLAVE: ¿Qué devuelve la base de datos realmente al backend?
+    console.log(
+      "7. wastesQuery ejecutada. Resultados (wastesResult.rows):",
+      wastesResult.rows
+    );
 
-        let firstname = "Usuario";
-        const volunteerQuery = `SELECT firstname FROM volunteers WHERE id = $1;`;
-        const volunteerResult = await pool.query(volunteerQuery, [userId]);
-        if (volunteerResult.rows.length > 0) {
-            firstname = volunteerResult.rows[0].firstname;
-        }
-        console.log("8. volunteerQuery ejecutada. Primer nombre:", firstname);
-
-        const formattedWastes = wastesResult.rows.map(row => ({
-            id: row.type,
-            type: row.type,
-            quantity: parseInt(row.total_quantity, 10)
-        }));
-        console.log("9. Desechos formateados. Datos enviados al frontend:", { firstname: firstname, wastes: formattedWastes }); // CLAVE: ¿Qué objeto final se envía?
-
-        res.json({
-            firstname: firstname,
-            wastes: formattedWastes
-        });
-
-    } catch (error) {
-        console.error("❌ Error capturado en la ruta /dashboard:", error);
-        res.status(500).json({ error: "Error del servidor al recuperar datos del dashboard." });
+    let firstname = "Usuario";
+    const volunteerQuery = `SELECT firstname FROM volunteers WHERE id = $1;`;
+    const volunteerResult = await pool.query(volunteerQuery, [userId]);
+    if (volunteerResult.rows.length > 0) {
+      firstname = volunteerResult.rows[0].firstname;
     }
+    console.log("8. volunteerQuery ejecutada. Primer nombre:", firstname);
+
+    const formattedWastes = wastesResult.rows.map((row) => ({
+      id: row.type,
+      type: row.type,
+      quantity: parseInt(row.total_quantity, 10),
+    }));
+    console.log("9. Desechos formateados. Datos enviados al frontend:", {
+      firstname: firstname,
+      wastes: formattedWastes,
+    }); // CLAVE: ¿Qué objeto final se envía?
+
+    res.json({
+      firstname: firstname,
+      wastes: formattedWastes,
+    });
+  } catch (error) {
+    console.error("❌ Error capturado en la ruta /dashboard:", error);
+    res
+      .status(500)
+      .json({ error: "Error del servidor al recuperar datos del dashboard." });
+  }
 });
 
 module.exports = router;
