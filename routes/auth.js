@@ -27,4 +27,16 @@ router.post("/auth", async (req, res) => {
   res.json({ token, id: user.id, firstname: user.firstname });
 });
 
+router.post("/logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ error: "Erreur logout" });
+    }
+
+    res.clearCookie("connect.sid"); // nom du cookie par défaut
+    return res.status(200).json({ message: "Déconnecté avec succès" });
+  });
+});
+
+
 module.exports = router;

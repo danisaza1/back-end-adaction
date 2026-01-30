@@ -4,10 +4,21 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
 const app = express();
-const port = 3001;
-const prisma = new PrismaClient();
+const port = process.env.PORT || 3001;
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+});
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://adaction-front.vercel.app/"
+  ],
+  credentials: true,
+}));
 // ✅ Middleware pour parser le JSON et les formulaires
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,6 +27,8 @@ app.use((req, res, next) => {
   console.log("Body:", req.body);
   next();
 });
+
+
 app.use(
   session({
     secret: "ton_secret_de_session", // une clé secrète pour sécuriser la session
